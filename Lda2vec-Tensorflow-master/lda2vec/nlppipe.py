@@ -61,7 +61,7 @@ class Preprocessor:
 
         print("\n---------- Tokenizing Texts ----------")
         # Iterate over all uncleaned documents
-        for i, doc in tqdm(enumerate(self.nlp.pipe(texts, n_threads=4))):
+        for i, doc in tqdm(enumerate(self.nlp.pipe(texts))):
             # Variable for holding cleaned tokens (to be joined later)
             doc_texts = []
             for token in doc:

@@ -1,4 +1,6 @@
 import tensorflow.compat.v1 as tf
+from tensorflow import keras
+import matplotlib.pyplot as plt
 import numpy as np
 import lda2vec.word_embedding as W
 import lda2vec.embedding_mixture as M
@@ -136,6 +138,16 @@ class Lda2vec:
 
         return doc_prior
 
+    # NEW
+    def reg(self):
+        """Computes regularization.
+
+        Returns:
+            TYPE: log of determinant of topic covariance
+        """
+        regularizer = DL.regularization(self.mixture.topic_embedding, self.num_topics)
+        return regularizer
+
     def _build_graph(self):
         """Builds the Lda2vec model graph.
         """
@@ -169,19 +181,22 @@ class Lda2vec:
             fraction = tf.Variable(1, trainable=False, dtype=tf.float32, name='fraction')
             loss_lda = self.lmbda * fraction * self.prior()
             tf.summary.scalar('lda_loss', loss_lda)
+        # Compute Regularization
+        with tf.name_scope('regularization'):
+            reg = self.reg()
 
-        # Determine if we should be using only word2vec loss or if we should add in LDA loss based on switch_loss Variable
-        loss = tf.cond(step < switch_loss, lambda: loss_word2vec, lambda: loss_word2vec + loss_lda)
+        # Determine when to switch to not use regularization
+        loss = tf.cond(step < switch_loss, lambda: loss_word2vec + loss_lda + reg, lambda: loss_word2vec + loss_lda)
         # Add current loss to moving average of loss
         loss_avgs_op = self.moving_avgs.apply([loss_lda, loss_word2vec, loss])
         
-        # Init the optimizer
+        # NEW
         with tf.control_dependencies([loss_avgs_op]):
             optimizer = tf.train.AdamOptimizer().minimize(loss)
         
         # Initialize all variables
         self.sesh.run(tf.global_variables_initializer(), options=tf.RunOptions(report_tensor_allocations_upon_oom=True))
-        
+
         # Create a merged summary of variables
         merged = tf.summary.merge_all()
 
@@ -228,6 +243,7 @@ class Lda2vec:
             # Initialize a tensorflow summary writer so we can save logs
             writer = tf.summary.FileWriter(self.logdir + '/', graph=self.sesh.graph)
 
+        losses = np.zeros(num_epochs)
         # Iterate over the number of epochs we want to train for
         for e in range(num_epochs):
             print('\nEPOCH:', e + 1)
@@ -244,9 +260,10 @@ class Lda2vec:
                 # Run a step of the model
                 summary, _, l, lw2v, llda, step = self.sesh.run(fetches, feed_dict=feed_dict)
 
+            losses[e] = l
             # Prints log every "report_every" epoch
             if (e+1) % report_every == 0:
-                print('LOSS', l, 'w2v', lw2v, 'lda', llda)
+                print('LOSS', l, 'w2v', lw2v, 'lda', llda, 'reg', self.sesh.run(self.reg()))
 
             # Saves model every "save_every" epoch
             if (e+1) % save_every == 0 and self.save_graph_def:
@@ -260,6 +277,13 @@ class Lda2vec:
             if e>0 and (e+1)%print_topics_every==0:
                 idxs = np.arange(self.num_topics)
                 words, sims = self.get_k_closest(idxs, in_type='topic', idx_to_word=idx_to_word, k=10, verbose=True)
+
+        plt.figure()
+        plt.plot(np.arange(num_epochs)+1, losses)
+        plt.xlabel('epochs')
+        plt.ylabel('loss (w2v_loss + lda_loss)')
+        plt.grid()
+        plt.show()
 
         # Save after all epochs are finished, but only if we didn't just save
         if self.save_graph_def and (e+1) % save_every != 0:

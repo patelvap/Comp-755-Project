@@ -3,6 +3,7 @@ import pandas as pd
 from sklearn.utils import shuffle
 import pickle
 import pyLDAvis
+from IPython.core.display import HTML
 import os
 import random
 
