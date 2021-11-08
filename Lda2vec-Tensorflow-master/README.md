@@ -1,5 +1,6 @@
 # Lda2vec-Tensorflow
-Tensorflow 1.5 implementation of Chris Moody's Lda2vec, adapted from @meereeum
+
+Tensorflow 1.5 adaptation of @nateraw implementation of Chris Moody's Lda2vec.
 
 ## Note
 This algorithm is very much so a research algorithm. It doesn't always work so well, and you have to train it for a long time. As the author noted in the paper, most of the time normal LDA will work better.
