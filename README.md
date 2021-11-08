@@ -1,5 +1,8 @@
-# Thematic Text Generation Using lda2vec
+# Temporal Topic Modeling Using LDA2Vec
 
-Link to cleaned.txt: https://drive.google.com/file/d/1R86cpMd3pBLvuPE1y0u-cCeQMbEeSt0h/view?usp=sharing
+Download these files before running
+Link to cleaned NIPS papers (cleaned.txt): https://drive.google.com/file/d/19EoVcRdTdQ5Lr6262Qtnb5k1PaRXCuoK/view?usp=sharing
+Link to pretrained word embeddings (glove.6B.300d.txt): https://drive.google.com/file/d/19_B-ip57uedacDN7SZN9DDVif29YD7vA/view?usp=sharing
+Link to original NIPS papers (papers.csv): https://drive.google.com/file/d/1ZvwH8whuG8pd0asa1LM7eeMEX6Tey4wi/view?usp=sharing
 
-Link to papers.csv: https://drive.google.com/file/d/1ju6_31v8xJC6TSi-8nvqD46R7bsr0I85/view?usp=sharing
+Note: Github does not allow uploads of more than 100MB!
