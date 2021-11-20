@@ -16,3 +16,7 @@ https://drive.google.com/file/d/1ZvwH8whuG8pd0asa1LM7eeMEX6Tey4wi/view?usp=shari
 
 
 ## Preprocessing
+
+Due to memory restrictions we sampled batches of the documents by year. Each pre-processing includes 10 non-overlapping documents each taken from 2008-2017. Thus we have 100 documents in each preprocessing folder.
+
+lda2vec was run on each of these groups individually resulting in a unique set of embeddings that can be used to find a suitable set of hyperparameters or other experiments. The Embeddings hold the output from the lda2vec for word, doc, and topic embeddings.
