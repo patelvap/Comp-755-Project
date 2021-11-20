@@ -15,4 +15,4 @@ Link to original NIPS papers (papers.csv):
 https://drive.google.com/file/d/1ZvwH8whuG8pd0asa1LM7eeMEX6Tey4wi/view?usp=sharing
 
 
-Note: Github does not allow uploads of more than 100MB!
+## Preprocessing
