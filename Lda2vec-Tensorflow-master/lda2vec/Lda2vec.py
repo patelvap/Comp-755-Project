@@ -7,6 +7,8 @@ import lda2vec.embedding_mixture as M
 import lda2vec.dirichlet_likelihood as DL
 from lda2vec import utils
 from datetime import datetime
+import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' 
 import warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 
@@ -18,7 +20,7 @@ class Lda2vec:
 
     def __init__(self, num_unique_documents, vocab_size, num_topics, freqs=None, 
                  save_graph_def=True, embedding_size=128, num_sampled=40,
-                 learning_rate=0.001, lmbda=200.0, alpha=None, power=0.75, batch_size=500, logdir='logdir',
+                 learning_rate=0.001, lmbda=400.0, alpha=None, power=0.75, batch_size=500, logdir='logdir',
                  restore=False, fixed_words=False, factors_in=None, pretrained_embeddings=None):
         """Summary
         
@@ -145,7 +147,8 @@ class Lda2vec:
         Returns:
             TYPE: log of determinant of topic covariance
         """
-        regularizer = DL.regularization(self.mixture.topic_embedding, self.num_topics)
+        normalized = tf.nn.l2_normalize(self.mixture.topic_embedding, axis=1)
+        regularizer = self.learning_rate*tf.reduce_sum(tf.matmul(normalized, normalized, adjoint_b = True, name="topic_matrix"))
         return regularizer
 
     def _build_graph(self):
@@ -186,7 +189,7 @@ class Lda2vec:
             reg = self.reg()
 
         # Determine when to switch to not use regularization
-        loss = tf.cond(step < switch_loss, lambda: loss_word2vec + loss_lda + reg, lambda: loss_word2vec + loss_lda)
+        loss = tf.cond(step < switch_loss, lambda: loss_word2vec + reg, lambda: loss_word2vec + loss_lda + reg)
         # Add current loss to moving average of loss
         loss_avgs_op = self.moving_avgs.apply([loss_lda, loss_word2vec, loss])
         
@@ -277,7 +280,7 @@ class Lda2vec:
             if e>0 and (e+1)%print_topics_every==0:
                 idxs = np.arange(self.num_topics)
                 words, sims = self.get_k_closest(idxs, in_type='topic', idx_to_word=idx_to_word, k=10, verbose=True)
-
+            
         plt.figure()
         plt.plot(np.arange(num_epochs)+1, losses)
         plt.xlabel('epochs')
