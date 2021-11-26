@@ -25,8 +25,7 @@ lda2vec was run on each of these groups individually resulting in a unique set o
 
 Here are the following coherence scores:
 
-Aggregate 1
-
+**Aggregate 1**
 
 Coherence scores for each number of topic clusters
 
@@ -38,22 +37,19 @@ Coherence scores for each number of topic clusters
 
 50 topics: 0.3827791294533138
 
-
-Aggregate 2
+**Aggregate 2**
 
 Coherence scores for each number of topic clusters
 
 40 topics: 0.3817637460859906
 
-
-Aggregate 3
+**Aggregate 3**
 
 Coherence scores for each number of topic clusters
 
 40 topics: 0.38678243150003255
 
-
-Aggregate 4
+**Aggregate 4**
 
 Coherence scores for each number of topic clusters
 
