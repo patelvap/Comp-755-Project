@@ -20,7 +20,7 @@ class Lda2vec:
 
     def __init__(self, num_unique_documents, vocab_size, num_topics, freqs=None, 
                  save_graph_def=True, embedding_size=128, num_sampled=40,
-                 learning_rate=0.001, lmbda=400.0, alpha=None, power=0.75, batch_size=500, logdir='logdir',
+                 learning_rate=0.001, lmbda=800.0, alpha=None, power=0.75, batch_size=500, logdir='logdir',
                  restore=False, fixed_words=False, factors_in=None, pretrained_embeddings=None):
         """Summary
         
