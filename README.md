@@ -27,23 +27,34 @@ Here are the following coherence scores:
 
 Aggregate 1
 
+
 Coherence scores for each number of topic clusters
+
 20 topics: 0.3107490686037474
+
 30 topics: 0.34992583735742505
+
 40 topics: 0.39195844545443026
+
 50 topics: 0.3827791294533138
+
 
 Aggregate 2
 
 Coherence scores for each number of topic clusters
+
 40 topics: 0.3817637460859906
+
 
 Aggregate 3
 
 Coherence scores for each number of topic clusters
+
 40 topics: 0.38678243150003255
+
 
 Aggregate 4
 
 Coherence scores for each number of topic clusters
+
 40 topics: 0.3831858639488928
